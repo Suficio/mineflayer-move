@@ -1,0 +1,26 @@
+{
+    "name": "mineflayer-move",
+    "version": "0.0.1",
+    "description": "Promise based movement library for Mineflayer",
+    "main": "index.js",
+    "scripts": {
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/CheezBarger/Mineflayer-Move.git"
+    },
+    "keywords": [
+      "mineflayer",
+      "minecraft",
+      "bot",
+      "navigation",
+      "3D"
+    ],
+    "author": "Jakub Łabor",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/CheezBarger/Mineflayer-Move/issues"
+    },
+    "homepage": "https://github.com/CheezBarger/Mineflayer-Move#readme"
+  }
+  
