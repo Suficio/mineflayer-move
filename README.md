@@ -9,7 +9,7 @@ Promise based movement library for Mineflayer found under: [https://github.com/s
     - [Advanced Usage](#advanced-usage)
     - [Documentation](#documentation)
         - [bot.move.to](#botmoveto-desiredpoint--forceenum)
-        - [bot.move.along)](#botmovealong-path)
+        - [bot.move.along](#botmovealong-path)
         - [bot.pathfinder.lookTowards](#botpathfinderlooktowards-position)
         - [bot.pathfinder.MONITOR_INTERVAL](#botpathfindermonitor_interval-position)
         - [bot.pathfinder.TIMEOUT](#botpathfindertimeout)
