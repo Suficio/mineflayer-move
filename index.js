@@ -8,7 +8,7 @@ module.exports = function(bot)
 {
     bot.move = new EventEmitter;
 
-    bot.move.ENUMMOVE = {Walk: 0, Hop: 1, Jump: 2};
+    bot.move.ENUMMove = {Walk: 0, Hop: 1, Jump: 2};
     bot.move.ENUMStatus = {Arrived: 0, Failed: 1, Timeout: 2};
 
     bot.move.MONITOR_INTERVAL = 40;
@@ -21,15 +21,8 @@ module.exports = function(bot)
         bot.lookAt(Vec3(p.x, bot.entity.position.y + bot.entity.height, p.z));
     };
 
-    const modalTraversal =
-    [
-        modalTraversal0,
-        modalTraversal1,
-        modalTraversal2,
-    ];
-
     // WARNING!: Bot will attempt to move to any block specified in one move, therefore ensure that it is possible to move to that block.
-    bot.move.to = function(blockPosition)
+    bot.move.to = function(blockPosition, forceENUM)
     {
         const p = blockPosition.floored().add(new Vec3(0.5, 0, 0.5));
         const bp = bot.entity.position.floored().add(new Vec3(0.5, 0, 0.5));
@@ -40,9 +33,12 @@ module.exports = function(bot)
         if (p.distanceTo(bp) > 6)
             console.warn('WARNING Move: Bot will probably not be able to move to this in one move, could lead to unexpected behaivor.');
 
-        let MODE = bot.move.ENUMMOVE.Walk;
-        if (horizDelta > 1 || vertDelta > 0) MODE = 1;
-        if (horizDelta > 3 || (horizDelta > 2 && vertDelta > 0)) MODE = 2;
+        let MODE = bot.move.ENUMMove.Walk;
+        if (horizDelta > 1 || vertDelta > 0) MODE = bot.move.ENUMMove.Hop;
+        if (horizDelta > 3 || (horizDelta > 2 && vertDelta > 0)) MODE = bot.move.ENUMMove.Jump;
+
+        if (forceENUM)
+            MODE = forceENUM;
 
         const MovePromise = modalTraversal[MODE](p, bp);
         MovePromise.catch(function(ENUMStatus)
@@ -88,6 +84,15 @@ module.exports = function(bot)
 
         return GlobalMovePromise;
     };
+
+    // Traversal functions
+
+    const modalTraversal =
+    [
+        modalTraversal0,
+        modalTraversal1,
+        modalTraversal2,
+    ];
 
     function modalTraversal0(p)
     {
