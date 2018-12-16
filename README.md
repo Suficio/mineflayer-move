@@ -8,10 +8,10 @@ Promise based movement library for Mineflayer found under: [https://github.com/s
     - [Basic Usage](#basic-usage)
     - [Advanced Usage](#advanced-usage)
     - [Documentation](#documentation)
-        - [bot.move.to( desiredPoint [, forceENUM])](#botmoveto-desiredpoint--forceenum)
-        - [bot.move.along( path)](#botmovealong-path)
-        - [bot.pathfinder.lookTowards( position)](#botpathfinderlooktowards-position)
-        - [bot.pathfinder.MONITOR_INTERVAL( position)](#botpathfindermonitor_interval-position)
+        - [bot.move.to](#botmoveto-desiredpoint--forceenum)
+        - [bot.move.along)](#botmovealong-path)
+        - [bot.pathfinder.lookTowards](#botpathfinderlooktowards-position)
+        - [bot.pathfinder.MONITOR_INTERVAL](#botpathfindermonitor_interval-position)
         - [bot.pathfinder.TIMEOUT](#botpathfindertimeout)
         - [bot.pathfinder.BLOCK_RADIUS](#botpathfinderblock_radius)
         - [bot.pathfinder.JUMP_RADIUS](#botpathfinderjump_radius)
@@ -70,7 +70,7 @@ Functionally simillar to `bot.lookAt` except the bot does not look at its feet.
 
 `position` - coordinates of the position you want to look towards
 
-### bot.pathfinder.MONITOR_INTERVAL( position)
+### bot.pathfinder.MONITOR_INTERVAL
 Integer value which determines how often, in millisecodns, the bots position is checked, defaults to 40.
 
 ### bot.pathfinder.TIMEOUT
