@@ -1,5 +1,6 @@
+'use strict';
 // Ensure move always centeres on block whichever move type
-EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events').EventEmitter;
 const Vec3 = require('vec3');
 
 const EPSILON = 0.06;
@@ -22,7 +23,7 @@ module.exports = function(bot)
     };
 
     // WARNING!: Bot will attempt to move to any block specified in one move, therefore ensure that it is possible to move to that block.
-    bot.move.to = function(blockPosition, forceENUM)
+    bot.move.to = function(blockPosition)
     {
         const p = blockPosition.floored().add(new Vec3(0.5, 0, 0.5));
         const bp = bot.entity.position.floored().add(new Vec3(0.5, 0, 0.5));
@@ -37,9 +38,6 @@ module.exports = function(bot)
         if (horizDelta > 1 || vertDelta > 0) MODE = bot.move.ENUMMove.Hop;
         if (horizDelta > 3 || (horizDelta > 2 && vertDelta > 0)) MODE = bot.move.ENUMMove.Jump;
 
-        if (forceENUM)
-            MODE = forceENUM;
-
         const MovePromise = modalTraversal[MODE](p, bp);
         MovePromise.catch(function(ENUMStatus)
         {
@@ -52,16 +50,19 @@ module.exports = function(bot)
         return MovePromise;
     };
 
-    bot.move.along = function(_p)
+    bot.move.along = function(path)
     {
         const GlobalMovePromise = new Promise(function(resolve, reject)
         {
-            // Clones the array so the original reference doesnt get modified
-            const path = _p.slice(0);
+            if (path instanceof Array)
+            {
+                path = path.slice(0);
+                path.peek = function() {return this[0];};
+            }
 
             function moveAlong()
             {
-                if (path.length !== 0)
+                if (path.peek() !== undefined)
                 {
                     const MovePromise = bot.move.to(path.pop());
                     MovePromise
@@ -73,8 +74,9 @@ module.exports = function(bot)
 
                             else if (ENUMStatus === bot.move.ENUMStatus.Failed)
                                 console.warn('WARNING Move: Bot move experienced failure and did not reach goal.');
-                        }
-                        );
+
+                            reject(ENUMStatus);
+                        });
                 }
                 else
                     resolve(bot.move.ENUMStatus.Arrived);
@@ -153,9 +155,13 @@ module.exports = function(bot)
                         {
                             clearInterval(mI);
                             // Ensures that the bot is centered on the block.
-                            modalTraversal0(p)
-                                .then(function(ENUMStatus) {resolve(ENUMStatus);})
-                                .catch(function(ENUMStatus) {reject(ENUMStatus);});
+                            if (bot.entity.position.horizontalDistance(p) > bot.move.BLOCK_RADIUS)
+                            {
+                                modalTraversal0(p)
+                                    .then(function(ENUMStatus) {resolve(ENUMStatus);})
+                                    .catch(function(ENUMStatus) {reject(ENUMStatus);});
+                            }
+                            else resolve(bot.move.ENUMStatus.Arrived);
                         }
                     }
 
@@ -196,9 +202,13 @@ module.exports = function(bot)
                         {
                             clearInterval(mI);
                             // Ensures that the bot is centered on the block.
-                            modalTraversal0(p)
-                                .then(function(ENUMStatus) {resolve(ENUMStatus);})
-                                .catch(function(ENUMStatus) {reject(ENUMStatus);});
+                            if (bot.entity.position.horizontalDistance(p) > bot.move.BLOCK_RADIUS)
+                            {
+                                modalTraversal0(p)
+                                    .then(function(ENUMStatus) {resolve(ENUMStatus);})
+                                    .catch(function(ENUMStatus) {reject(ENUMStatus);});
+                            }
+                            else resolve(bot.move.ENUMStatus.Arrived);
                         }
                     }
 
