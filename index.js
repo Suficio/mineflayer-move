@@ -9,13 +9,13 @@ module.exports = function(bot)
 {
     bot.move = new EventEmitter;
 
-    bot.move.ENUMMove = {Walk: 0, Hop: 1, Jump: 2, Run: 3};
+    bot.move.ENUMMove = {Walk: 0, Hop: 1, Jump: 2};
     bot.move.ENUMStatus = {Arrived: 0, Failed: 1, Timeout: 2};
 
     bot.move.MONITOR_INTERVAL = 40;
     bot.move.TIMEOUT = 2600;
-    bot.move.BLOCK_RADIUS = 0.16;
-    bot.move.JUMP_RADIUS = 0.82;
+    bot.move.BLOCK_RADIUS = 0.14;
+    bot.move.JUMP_RADIUS = 0.84;
 
     bot.move.lookTowards = function(p)
     {
@@ -94,7 +94,6 @@ module.exports = function(bot)
         modalTraversal0,
         modalTraversal1,
         modalTraversal2,
-        modalTraversal3,
     ];
 
     function modalTraversal0(p)
@@ -148,7 +147,7 @@ module.exports = function(bot)
                         bot.setControlState('jump', true);
 
                     // Additional value makes sure the bot stops jumping on time, any offet from block center will be later corrected
-                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS + 0.10)
+                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS + 0.30)
                     {
                         bot.clearControlStates();
                         // Should the bot be falling, this ensures that it safetly lands before continuing.
@@ -210,43 +209,6 @@ module.exports = function(bot)
                                     .catch(function(ENUMStatus) {reject(ENUMStatus);});
                             }
                             else resolve(bot.move.ENUMStatus.Arrived);
-                        }
-                    }
-
-                    if (Date.now() - startTime > bot.move.TIMEOUT)
-                    {
-                        bot.clearControlStates();
-                        clearInterval(mI);
-                        reject(bot.move.ENUMStatus.Timeout);
-                    }
-                },
-                bot.move.MONITOR_INTERVAL
-            );
-        });
-
-        return MovePromise;
-    }
-
-    function modalTraversal3(p)
-    {
-        const MovePromise = new Promise(function(resolve, reject)
-        {
-            const startTime = Date.now();
-            const mI = setInterval(
-                function()
-                {
-                    bot.move.lookTowards(p);
-                    bot.setControlState('forward', true);
-                    bot.setControlState('sprint', true);
-
-                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS)
-                    {
-                        bot.clearControlStates();
-                        // Should the bot be falling, this ensures that it safetly lands before continuing.
-                        if (Math.abs(bot.entity.position.y - p.y) < EPSILON)
-                        {
-                            clearInterval(mI);
-                            resolve(bot.move.ENUMStatus.Arrived);
                         }
                     }
 
