@@ -15,7 +15,7 @@ module.exports = function(bot)
     bot.move.MONITOR_INTERVAL = 40;
     bot.move.TIMEOUT = 2600;
     bot.move.BLOCK_RADIUS = 0.14;
-    bot.move.JUMP_RADIUS = 0.84;
+    bot.move.JUMP_RADIUS = 0.82;
 
     bot.move.lookTowards = function(p)
     {
@@ -35,8 +35,8 @@ module.exports = function(bot)
             console.warn('WARNING Move: Bot will probably not be able to move to this in one move, could lead to unexpected behaivor.');
 
         let MODE = bot.move.ENUMMove.Walk;
-        if (horizDelta > 1 || vertDelta > 0) MODE = bot.move.ENUMMove.Hop;
-        if (horizDelta > 3 || (horizDelta > 2 && vertDelta > 0)) MODE = bot.move.ENUMMove.Jump;
+        if ((horizDelta > 1 && vertDelta >= 0) || (horizDelta === 1 && vertDelta === 1)) MODE = bot.move.ENUMMove.Hop;
+        if (horizDelta > 2 || (horizDelta > 2 && vertDelta > 0)) MODE = bot.move.ENUMMove.Jump;
 
         const MovePromise = modalTraversal[MODE](p, bp);
         MovePromise.catch(function(ENUMStatus)
