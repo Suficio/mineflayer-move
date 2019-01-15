@@ -1,13 +1,11 @@
 'use strict';
-// Ensure move always centeres on block whichever move type
-const EventEmitter = require('events').EventEmitter;
 const Vec3 = require('vec3');
 
 const EPSILON = 0.06;
 
 module.exports = function(bot)
 {
-    bot.move = new EventEmitter;
+    bot.move = {};
 
     bot.move.ENUMMove = {Walk: 0, Hop: 1, Jump: 2};
     bot.move.ENUMStatus = {Arrived: 0, Failed: 1, Timeout: 2};
