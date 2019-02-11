@@ -62,9 +62,13 @@ module.exports = function(bot)
             {
                 if (path.peek() !== undefined)
                 {
-                    const MovePromise = bot.move.to(path.pop());
+                    const MovePromise = bot.move.to(path.peek());
                     MovePromise
-                        .then(moveAlong)
+                        .then(function()
+                        {
+                            path.pop(); // Dont pop until sure that movement was successful
+                            moveAlong();
+                        })
                         .catch(function(ENUMStatus)
                         {
                             if (ENUMStatus === bot.move.ENUMStatus.Timeout)
