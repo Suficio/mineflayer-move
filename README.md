@@ -1,9 +1,11 @@
 # Mineflayer-Move
+
 Promise based movement library for Mineflayer found under: [https://github.com/superjoe30/mineflayer/](https://github.com/superjoe30/mineflayer/)
 
 ```diff
 - I do not have the time to maintain this as of now
 ```
+
 ## Table of Contents
 - [Mineflayer-Move](#mineflayer-move)
     - [Table of Contents](#table-of-contents)
@@ -22,10 +24,17 @@ Promise based movement library for Mineflayer found under: [https://github.com/s
         - [bot.pathfinder.ENUMStatus](#botpathfinderenumstatus)
 
 ## Features
+
 * Provides high level API for moving bot between two points
 * Uses a promise based API
 
 ## Basic Usage
+
+Firstly, install:
+```
+    npm install --save cheezbarger/mineflayer-move
+```
+
 To get started just paste this code into your bot:
 ```js
 const mineflayer = require('mineflayer');
@@ -50,6 +59,63 @@ bot.on('chat', function(username, message)
 ```
 
 ## Advanced Usage
+
+The following code illustrates how this library might be used in conjunction with other pathfinding libraries.
+```js
+const mineflayer = require('mineflayer');
+const pathfinder = require('mineflayer-pathfinder');
+const move = require('mineflayer-move');
+
+// Install move and pathfinder
+pathfinder(bot);
+move(bot);
+
+bot.on('chat', function(username, message)
+{
+    if (message === 'come')
+    {
+        bot.pathfinder.to(
+            bot.entity.position.floored(),
+            bot.players[username].entity.position.floored()
+        )
+            .then(function(returnState)
+            {
+                bot.move.along(returnState.path)
+                    .then(function(moveReturn)
+                    {
+                        if (moveReturn === bot.move.ENUMStatus.Arrived)
+                            bot.chat('I\'ve arrived!');
+                        else
+                            bot.chat('Something went wrong');
+                    });
+            });
+    }
+});
+```
+
+```js
+const pathfinder = require('mineflayer-navigate');
+
+// Install move and pathfinder
+navigate(bot);
+
+bot.on('chat', function(username, message)
+{
+    if (message === 'come')
+    {
+        const returnState = bot.navigate.findPathSync(bot.players[username].entity.position);
+
+        bot.move.along(returnState.path.reverse())
+            .then(function(moveReturn)
+            {
+                if (moveReturn === bot.move.ENUMStatus.Arrived)
+                    bot.chat('I\'ve arrived!');
+                else
+                    bot.chat('Something went wrong');
+            });
+    }
+});
+```
 
 ## Documentation
 
