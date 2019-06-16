@@ -94,7 +94,7 @@ bot.on('chat', function(username, message)
 ```
 
 ```js
-const pathfinder = require('mineflayer-navigate');
+const pathfinder = require('mineflayer-navigate')(mineflayer);
 
 // Install move and pathfinder
 navigate(bot);
