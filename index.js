@@ -17,7 +17,7 @@ module.exports = function(bot)
 
     bot.move.lookTowards = function(p)
     {
-        bot.lookAt(Vec3(p.x, bot.entity.position.y + bot.entity.height - 0.2, p.z));
+        bot.lookAt(new Vec3(p.x, bot.entity.position.y + bot.entity.height - 0.2, p.z));
     };
 
     // WARNING!: Bot will attempt to move to any block specified in one move, therefore ensure that it is possible to move to that block.
@@ -62,13 +62,9 @@ module.exports = function(bot)
             {
                 if (path.peek() !== undefined)
                 {
-                    const MovePromise = bot.move.to(path.peek());
+                    const MovePromise = bot.move.to(path.pop());
                     MovePromise
-                        .then(function()
-                        {
-                            path.pop(); // Dont pop until sure that movement was successful
-                            moveAlong();
-                        })
+                        .then(moveAlong)
                         .catch(function(ENUMStatus)
                         {
                             if (ENUMStatus === bot.move.ENUMStatus.Timeout)
@@ -77,7 +73,7 @@ module.exports = function(bot)
                             else if (ENUMStatus === bot.move.ENUMStatus.Failed)
                                 console.warn('WARNING Move: Bot move experienced failure and did not reach goal.');
 
-                            reject(ENUMStatus);
+                            resolve(ENUMStatus);
                         });
                 }
                 else
@@ -149,7 +145,7 @@ module.exports = function(bot)
                         bot.setControlState('jump', true);
 
                     // Additional value makes sure the bot stops jumping on time, any offet from block center will be later corrected
-                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS + 0.30)
+                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS)
                     {
                         bot.clearControlStates();
                         // Should the bot be falling, this ensures that it safetly lands before continuing.
@@ -196,7 +192,7 @@ module.exports = function(bot)
                     if (bot.entity.position.horizontalDistance(bp) > bot.move.JUMP_RADIUS)
                         bot.setControlState('jump', true);
 
-                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS + 0.30)
+                    if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS)
                     {
                         bot.clearControlStates();
                         // Should the bot be falling, this ensures that it safetly lands before continuing.
