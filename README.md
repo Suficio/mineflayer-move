@@ -62,7 +62,7 @@ Moves the bot towards the desired point. The bot will not check whether it can a
 Returns a promise which resolves or rejects with the corresponding `bot.move.ENUMStatus`.
 
 ### bot.move.along( path)
-Moves the bot along the provided path.
+Moves the bot along the provided path. Will use `path.pop` and `path.peek` to navigate along path.
 
 `path` - array of coordinates through which to move
 
@@ -95,4 +95,4 @@ Object with the following properties:
 Object with the following properties:
 * `Arrived` - occurs when the bot successfully moved to the goal
 * `Failed` - occurs when the bot could not move to the goal \[Not implemented]
-* `Timeout` - occurs when the bot timedout while moving to the goal
+* `Timeout` - occurs when the bot timed out while moving to the goal
