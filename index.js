@@ -23,6 +23,8 @@ module.exports = function(bot)
     // WARNING!: Bot will attempt to move to any block specified in one move, therefore ensure that it is possible to move to that block.
     bot.move.to = function(blockPosition)
     {
+        if (blockPosition === undefined) return Promise.reject(bot.move.ENUMStatus.Arrived);
+
         const p = blockPosition.floored().add(new Vec3(0.5, 0, 0.5));
         const bp = bot.entity.position.floored().add(new Vec3(0.5, 0, 0.5));
 
@@ -54,7 +56,7 @@ module.exports = function(bot)
         {
             if (path instanceof Array)
             {
-                path = path.slice(0);
+                path = path.slice(0); // Copies to avoid modifying
                 path.peek = function() {return this[0];};
             }
 
