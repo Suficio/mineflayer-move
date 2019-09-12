@@ -96,7 +96,7 @@ module.exports = function(bot)
         modalTraversal2,
     ];
 
-    function modalTraversal0(p)
+    function modalTraversal0(p, sprint = false)
     {
         const MovePromise = new Promise(function(resolve, reject)
         {
@@ -106,6 +106,7 @@ module.exports = function(bot)
                 {
                     bot.move.lookTowards(p);
                     bot.setControlState('forward', true);
+                    if (sprint) bot.setControlState('sprint', true);
 
                     if (bot.entity.position.horizontalDistance(p) < bot.move.BLOCK_RADIUS)
                     {
@@ -204,7 +205,7 @@ module.exports = function(bot)
                             // Ensures that the bot is centered on the block.
                             if (bot.entity.position.horizontalDistance(p) > bot.move.BLOCK_RADIUS)
                             {
-                                modalTraversal0(p)
+                                modalTraversal0(p, true)
                                     .then(function(ENUMStatus) {resolve(ENUMStatus);})
                                     .catch(function(ENUMStatus) {reject(ENUMStatus);});
                             }
