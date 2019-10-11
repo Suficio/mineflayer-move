@@ -2,10 +2,6 @@
 
 Promise based movement library for Mineflayer found under: [https://github.com/superjoe30/mineflayer/](https://github.com/superjoe30/mineflayer/)
 
-```diff
-- I do not have the time to maintain this as of now
-```
-
 ## Table of Contents
 - [Mineflayer-Move](#mineflayer-move)
     - [Table of Contents](#table-of-contents)
