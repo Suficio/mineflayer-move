@@ -1,4 +1,4 @@
-# Mineflayer-Move
+# mineflayer-move
 
 Promise based movement library for Mineflayer found under: [https://github.com/superjoe30/mineflayer/](https://github.com/superjoe30/mineflayer/)
 
